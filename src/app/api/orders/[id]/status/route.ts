@@ -3,16 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { ORDER_STATUSES, canSetStatus } from "@/lib/orderStatus";
 
 const statusSchema = z.object({
-  status: z.enum([
-    "PICKUP",
-    "OUT_FOR_DELIVERY",
-    "COMPLETED",
-    "READY",
-    "IN_PROGRESS",
-    "NEW",
-  ]),
+  status: z.enum(ORDER_STATUSES),
   prepNotes: z.string().optional(),
 });
 
@@ -60,18 +54,8 @@ async function handleStatusUpdate(
 
     // Restrict statuses based on role
     const requested = parsed.data.status;
-    if (role === "CALL_CENTER") {
-      const allowed = new Set(["PICKUP", "OUT_FOR_DELIVERY", "COMPLETED"]);
-      if (!allowed.has(requested)) {
-        return NextResponse.json({ error: "Bu statusu dəyişmək icazəli deyil" }, { status: 403 });
-      }
-    }
-    
-    if (role === "FLORIST") {
-      const allowed = new Set(["NEW", "IN_PROGRESS", "READY", "PICKUP", "OUT_FOR_DELIVERY", "COMPLETED"]);
-      if (!allowed.has(requested)) {
-        return NextResponse.json({ error: "Bu statusu dəyişmək icazəli deyil" }, { status: 403 });
-      }
+    if (!canSetStatus(role, requested)) {
+      return NextResponse.json({ error: "Bu statusu dəyişmək icazəli deyil" }, { status: 403 });
     }
 
     const updateData: any = { status: requested };
