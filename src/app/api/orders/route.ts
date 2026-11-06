@@ -2,19 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
-
-const createOrderSchema = z.object({
-  customerFullName: z.string().min(1),
-  customerPhone: z.string().min(1),
-  deliveryDate: z.string().min(1), // ISO date (yyyy-mm-dd)
-  deliveryTime: z.string().min(1), // HH:mm
-  orderType: z.enum(["PICKUP", "DELIVERY"]),
-  deliveryAddress: z.string().optional(),
-  notes: z.string().optional(),
-  amount: z.number().nonnegative(),
-  photoUrls: z.array(z.string()).optional(),
-});
+import { createOrderSchema } from "@/lib/schemas";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);

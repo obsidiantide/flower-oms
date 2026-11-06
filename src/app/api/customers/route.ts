@@ -2,16 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
-
-const createCustomerSchema = z.object({
-  fullName: z.string().min(1, "Ad və soyad tələb olunur"),
-  phone: z.string().min(1, "Telefon nömrəsi tələb olunur"),
-  email: z.string().email("Düzgün email daxil edin").optional().or(z.literal("")),
-  address: z.string().optional(),
-  birthday: z.string().optional(),
-  notes: z.string().optional(),
-});
+import { createCustomerSchema } from "@/lib/schemas";
 
 // GET - список всех клиентов
 export async function GET(req: NextRequest) {
