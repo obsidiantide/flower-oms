@@ -10,7 +10,7 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 ## B. Test coverage
 - [x] Vitest setup and tests for order status permission rules
 - [x] Extract zod schemas from API routes into `src/lib/schemas.ts` and test them
-- [ ] Tests for the florist usage/ready payload schemas
+- [x] Tests for the florist usage/ready payload schemas
 
 ## C. Architecture and refactoring
 - [x] Extract role-based status rules into `src/lib/orderStatus.ts`
