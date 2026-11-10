@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createCustomerSchema, createOrderSchema } from "./schemas";
+import {
+  createCustomerSchema,
+  createOrderSchema,
+  readySchema,
+  usageSchema,
+} from "./schemas";
 
 const validOrder = {
   customerFullName: "Aysel Məmmədova",
@@ -49,5 +54,47 @@ describe("createCustomerSchema", () => {
   it("requires name and phone", () => {
     expect(createCustomerSchema.safeParse({ ...validCustomer, fullName: "" }).success).toBe(false);
     expect(createCustomerSchema.safeParse({ fullName: "X" }).success).toBe(false);
+  });
+});
+
+describe("usageSchema", () => {
+  it("accepts a list of flower usages", () => {
+    const r = usageSchema.safeParse({
+      items: [
+        { flowerId: "f1", quantity: 3 },
+        { flowerId: "f2", quantity: 0 },
+      ],
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it("rejects an empty items list", () => {
+    expect(usageSchema.safeParse({ items: [] }).success).toBe(false);
+  });
+
+  it("rejects negative or fractional quantities", () => {
+    expect(
+      usageSchema.safeParse({ items: [{ flowerId: "f1", quantity: -1 }] }).success
+    ).toBe(false);
+    expect(
+      usageSchema.safeParse({ items: [{ flowerId: "f1", quantity: 1.5 }] }).success
+    ).toBe(false);
+  });
+
+  it("rejects an empty flowerId", () => {
+    expect(
+      usageSchema.safeParse({ items: [{ flowerId: "", quantity: 1 }] }).success
+    ).toBe(false);
+  });
+});
+
+describe("readySchema", () => {
+  it("accepts an empty object and optional notes", () => {
+    expect(readySchema.safeParse({}).success).toBe(true);
+    expect(readySchema.safeParse({ prepNotes: "wrapped" }).success).toBe(true);
+  });
+
+  it("rejects non-string notes", () => {
+    expect(readySchema.safeParse({ prepNotes: 5 }).success).toBe(false);
   });
 });
