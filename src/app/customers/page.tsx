@@ -11,7 +11,7 @@ export default async function CustomersPage() {
     redirect("/login?callbackUrl=/customers");
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     redirect("/dashboard");
   }

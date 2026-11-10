@@ -22,7 +22,7 @@ export default async function SalesReport({
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect("/login?callbackUrl=/admin/reports/sales");
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN") redirect("/dashboard");
 
   const { start, end } = await parseRange(searchParams);

@@ -16,7 +16,7 @@ export default async function OrderDetailPage({ params }: Props) {
     redirect(`/login?callbackUrl=/orders/${id ?? ""}`);
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     redirect("/dashboard");
   }

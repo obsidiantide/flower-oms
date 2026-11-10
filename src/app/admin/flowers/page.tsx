@@ -8,7 +8,7 @@ import EditFlowerRow from "./ui/EditFlowerRow";
 export default async function FlowersAdminPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect("/login?callbackUrl=/admin/flowers");
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN") redirect("/dashboard");
 
   const flowers = await prisma.flower.findMany({ orderBy: { name: "asc" } });

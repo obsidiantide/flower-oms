@@ -12,7 +12,7 @@ export async function POST(
   if (!session?.user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "FLORIST" && role !== "ADMIN") {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
@@ -32,7 +32,7 @@ export async function POST(
     return NextResponse.json({ error: "Sifariş ID-si tapılmadı" }, { status: 400 });
   }
 
-  const username = (session.user as any).username as string | undefined;
+  const username = session.user.username;
   const currentUser = username
     ? await prisma.user.findUnique({ where: { username } })
     : null;

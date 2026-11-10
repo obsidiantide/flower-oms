@@ -11,8 +11,8 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const role = (session.user as any).role as string | undefined;
-  const userId = (session.user as any).id as string;
+  const role = session.user.role;
+  const userId = session.user.id as string;
 
   let title = "Panel";
   if (role === "ADMIN") title = "Admin paneli";

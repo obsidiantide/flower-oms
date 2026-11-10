@@ -51,18 +51,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         // Persist basic user info in the JWT token
-        token.id = (user as any).id;
-        token.role = (user as any).role;
-        token.username = (user as any).username;
+        token.id = user.id;
+        token.role = user.role;
+        token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         // Expose id and role on session.user
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
-        (session.user as any).username = token.username;
+        session.user.id = token.id;
+        session.user.role = token.role;
+        session.user.username = token.username;
       }
       return session;
     },

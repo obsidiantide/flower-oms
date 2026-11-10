@@ -13,7 +13,7 @@ export default async function UsersManagementPage() {
     redirect("/login?callbackUrl=/admin/users");
   }
 
-  const role = (session.user as any).role as string;
+  const role = session.user.role as string;
   if (role !== "ADMIN") {
     redirect("/dashboard");
   }

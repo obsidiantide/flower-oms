@@ -6,7 +6,7 @@ import MobileMenu from "@/components/MobileMenu";
 
 export default async function TopNav() {
   const session = await getServerSession(authOptions);
-  const role = (session?.user as any)?.role as string | undefined;
+  const role = session?.user?.role;
   const name = (session?.user as any)?.displayName || (session?.user as any)?.name || "";
 
   return (

@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }

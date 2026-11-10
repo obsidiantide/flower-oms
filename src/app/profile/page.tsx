@@ -10,7 +10,7 @@ export default async function ProfilePage() {
     redirect("/login?callbackUrl=/profile");
   }
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id as string;
   
   const user = await prisma.user.findUnique({
     where: { id: userId },

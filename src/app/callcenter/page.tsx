@@ -22,7 +22,7 @@ function statusVariant(status: string): Parameters<typeof Badge>[0]["variant"] {
 export default async function CallCenterPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect("/login?callbackUrl=/callcenter");
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "CALL_CENTER" && role !== "ADMIN") redirect("/dashboard");
 
   const readyOrders = await prisma.order.findMany({

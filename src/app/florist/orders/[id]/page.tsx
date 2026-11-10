@@ -12,7 +12,7 @@ export default async function FloristOrderPage({ params }: Props) {
   const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect(`/login?callbackUrl=/florist/orders/${id ?? ""}`);
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "FLORIST" && role !== "ADMIN") redirect("/dashboard");
 
   if (!id) redirect("/florist");

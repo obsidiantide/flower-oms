@@ -18,7 +18,7 @@ export async function PATCH(
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN") return NextResponse.json({ error: "Access denied" }, { status: 403 });
 
   const paramsMaybePromise = (context as any).params;
@@ -49,7 +49,7 @@ export async function PATCH(
     });
 
     if (stockEventNeeded) {
-      const username = (session.user as any).username as string | undefined;
+      const username = session.user.username;
       const currentUser = username
         ? await prisma.user.findUnique({ where: { username } })
         : null;

@@ -20,7 +20,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN") return NextResponse.json({ error: "Access denied" }, { status: 403 });
 
   const json = await req.json().catch(() => null);

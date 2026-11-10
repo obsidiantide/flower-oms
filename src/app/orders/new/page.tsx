@@ -10,7 +10,7 @@ export default async function NewOrderPage() {
     redirect("/login?callbackUrl=/orders/new");
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     redirect("/dashboard");
   }

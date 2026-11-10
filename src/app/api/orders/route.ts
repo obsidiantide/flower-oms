@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const role = (session.user as any).role as string | undefined;
+  const role = session.user.role;
   if (role !== "ADMIN" && role !== "CALL_CENTER") {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const username = (session.user as any).username as string | undefined;
+  const username = session.user.username;
 
   // Fetch the current user from DB to reliably get their id
   const currentUser = username
