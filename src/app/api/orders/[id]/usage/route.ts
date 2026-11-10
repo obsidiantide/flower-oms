@@ -2,18 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
-
-const usageSchema = z.object({
-  items: z
-    .array(
-      z.object({
-        flowerId: z.string().min(1),
-        quantity: z.number().int().nonnegative(),
-      })
-    )
-    .min(1),
-});
+import { usageSchema } from "@/lib/schemas";
 
 export async function POST(
   req: NextRequest,

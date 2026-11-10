@@ -20,3 +20,18 @@ export const createCustomerSchema = z.object({
   birthday: z.string().optional(),
   notes: z.string().optional(),
 });
+
+export const usageSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        flowerId: z.string().min(1),
+        quantity: z.number().int().nonnegative(),
+      })
+    )
+    .min(1),
+});
+
+export const readySchema = z.object({
+  prepNotes: z.string().optional(),
+});

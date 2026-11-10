@@ -2,11 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
-
-const readySchema = z.object({
-  prepNotes: z.string().optional(),
-});
+import { readySchema } from "@/lib/schemas";
 
 export async function POST(
   req: NextRequest,
