@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasRole } from "@/lib/roles";
 
 export async function POST(
   req: NextRequest,
@@ -12,7 +13,7 @@ export async function POST(
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
   const role = session.user.role;
-  if (role !== "FLORIST") {
+  if (!hasRole(role, "FLORIST")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

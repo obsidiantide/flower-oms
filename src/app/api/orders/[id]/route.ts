@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { hasRole } from "@/lib/roles";
 
 const updateOrderSchema = z.object({
   customerFullName: z.string().min(1),
@@ -26,7 +27,7 @@ export async function PATCH(
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN") {
+  if (!hasRole(role, "ADMIN")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

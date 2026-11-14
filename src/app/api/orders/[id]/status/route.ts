@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { ORDER_STATUSES, canSetStatus } from "@/lib/orderStatus";
+import { hasRole } from "@/lib/roles";
 
 const statusSchema = z.object({
   status: z.enum(ORDER_STATUSES),
@@ -19,7 +20,7 @@ async function handleStatusUpdate(
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
   const role = session.user.role;
-  if (role !== "ADMIN" && role !== "CALL_CENTER" && role !== "FLORIST") {
+  if (!hasRole(role, "ADMIN", "CALL_CENTER", "FLORIST")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

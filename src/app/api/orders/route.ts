@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createOrderSchema } from "@/lib/schemas";
+import { hasRole } from "@/lib/roles";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN" && role !== "CALL_CENTER") {
+  if (!hasRole(role, "ADMIN", "CALL_CENTER")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

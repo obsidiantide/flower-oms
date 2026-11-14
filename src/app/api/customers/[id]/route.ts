@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { hasRole } from "@/lib/roles";
 
 const updateCustomerSchema = z.object({
   fullName: z.string().min(1).optional(),
@@ -25,7 +26,7 @@ export async function GET(
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN" && role !== "CALL_CENTER") {
+  if (!hasRole(role, "ADMIN", "CALL_CENTER")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 
@@ -90,7 +91,7 @@ export async function PATCH(
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN" && role !== "CALL_CENTER") {
+  if (!hasRole(role, "ADMIN", "CALL_CENTER")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 
@@ -170,7 +171,7 @@ export async function DELETE(
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN") {
+  if (!hasRole(role, "ADMIN")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

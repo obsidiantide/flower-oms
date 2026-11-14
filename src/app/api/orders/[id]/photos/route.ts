@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { promises as fs } from "fs";
 import path from "path";
+import { hasRole } from "@/lib/roles";
 
 function uploadsRoot() {
   return path.join(process.cwd(), "uploads");
@@ -16,7 +17,7 @@ export async function GET(
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   const role = session.user.role;
-  if (role !== "ADMIN" && role !== "CALL_CENTER" && role !== "FLORIST") {
+  if (!hasRole(role, "ADMIN", "CALL_CENTER", "FLORIST")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 
@@ -42,7 +43,7 @@ export async function POST(
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   const role = session.user.role;
-  if (role !== "FLORIST" && role !== "ADMIN") {
+  if (!hasRole(role, "FLORIST", "ADMIN")) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

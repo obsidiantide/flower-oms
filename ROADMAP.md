@@ -15,7 +15,7 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 ## C. Architecture and refactoring
 - [x] Extract role-based status rules into `src/lib/orderStatus.ts`
 - [x] Replace `(session.user as any)` casts with typed NextAuth session augmentation
-- [ ] Share the role check between `orders` and `customers` routes
+- [x] Share the role check between `orders` and `customers` routes (`src/lib/roles.ts`)
 
 ## D. Performance and polish
 - [ ] Lazy-load the image upload component
