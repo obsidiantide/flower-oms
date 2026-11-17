@@ -9,6 +9,7 @@ import Select from "@/app/ui/Select";
 import Button from "@/app/ui/Button";
 import SearchBar from "./ui/SearchBar";
 import OrderCard from "./ui/OrderCard";
+import { buildOrderWhere } from "@/lib/orderFilters";
 
 function formatStatus(status: string): string {
   switch (status) {
@@ -78,40 +79,7 @@ export default async function OrdersPage({
     redirect("/dashboard");
   }
 
-  const where: any = {};
-
-  if (params.search) {
-    where.OR = [
-      { customerFullName: { contains: params.search } },
-      { customerPhone: { contains: params.search } },
-    ];
-  }
-
-  if (params.status) {
-    where.status = params.status;
-  }
-
-  if (params.date) {
-    const date = new Date(params.date);
-    const nextDay = new Date(date);
-    nextDay.setDate(nextDay.getDate() + 1);
-    where.deliveryDate = {
-      gte: date,
-      lt: nextDay,
-    };
-  }
-
-  if (params.time) {
-    where.deliveryTime = params.time;
-  }
-
-  if (params.florist) {
-    if (params.florist === "unassigned") {
-      where.assignedToId = null;
-    } else {
-      where.assignedToId = params.florist;
-    }
-  }
+  const where = buildOrderWhere(params);
 
   const orders = await prisma.order.findMany({
     where,

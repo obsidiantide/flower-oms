@@ -16,6 +16,7 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 - [x] Extract role-based status rules into `src/lib/orderStatus.ts`
 - [x] Replace `(session.user as any)` casts with typed NextAuth session augmentation
 - [x] Share the role check between `orders` and `customers` routes (`src/lib/roles.ts`)
+- [x] Extract orders list filter into `src/lib/orderFilters.ts` with tests
 
 ## D. Performance and polish
 - [ ] Lazy-load the image upload component
