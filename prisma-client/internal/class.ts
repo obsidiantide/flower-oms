@@ -23,7 +23,7 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "/home/user/flower-oms/prisma-client",
+      "value": "C:\\Users\\mrxxm\\OneDrive\\Desktop\\flower-oms\\prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -32,12 +32,12 @@ const config: runtime.GetPrismaClientConfig = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/user/flower-oms/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\mrxxm\\OneDrive\\Desktop\\flower-oms\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../prisma",
@@ -47,7 +47,7 @@ const config: runtime.GetPrismaClientConfig = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
