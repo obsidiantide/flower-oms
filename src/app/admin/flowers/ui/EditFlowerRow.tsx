@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/ui/Input";
 import Select from "@/app/ui/Select";
 import Button from "@/app/ui/Button";
+import { stockStatus } from "@/lib/stock";
 
 export default function EditFlowerRow({
   flower,
@@ -52,7 +53,8 @@ export default function EditFlowerRow({
     }
   }
 
-  const low = Number(stockQuantity) <= Number(lowStockLevel);
+  const status = stockStatus(Number(stockQuantity), Number(lowStockLevel));
+  const low = status !== "ok";
 
   return (
     <tr className={`border-b last:border-b-0 ${low ? "bg-amber-50" : ""}`}>
