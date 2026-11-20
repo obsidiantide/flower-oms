@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import NewFlowerForm from "./ui/NewFlowerForm";
 import EditFlowerRow from "./ui/EditFlowerRow";
+import { countNeedingRestock } from "@/lib/stock";
 
 export default async function FlowersAdminPage() {
   const session = await getServerSession(authOptions);
@@ -13,10 +14,17 @@ export default async function FlowersAdminPage() {
 
   const flowers = await prisma.flower.findMany({ orderBy: { name: "asc" } });
 
+  const needRestock = countNeedingRestock(flowers);
+
   return (
     <div className="min-h-screen bg-cosmic-gradient py-8">
       <div className="mx-auto max-w-5xl rounded-xl bg-space-surface p-6 shadow-xl border border-space-border">
         <h1 className="text-2xl font-semibold mb-4 font-display text-space-text-primary">Çiçəklər (Anbar)</h1>
+        {needRestock > 0 && (
+          <p className="mb-4 rounded-lg border border-cosmic-orange/30 bg-cosmic-orange/10 px-3 py-2 text-sm text-cosmic-orange-light">
+            Ehtiyatı azalan və ya bitən çiçəklər: {needRestock}
+          </p>
+        )}
         <NewFlowerForm />
 
         <div className="mt-6 overflow-x-auto">

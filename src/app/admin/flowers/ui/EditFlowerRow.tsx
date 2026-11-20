@@ -88,9 +88,14 @@ export default function EditFlowerRow({
             value={stockQuantity}
             onChange={(e) => setStockQuantity(e.target.value)}
           />
-          {low && (
+          {status === "low" && (
             <span className="inline-flex items-center rounded-full border border-cosmic-orange/30 bg-cosmic-orange/15 px-2 py-0.5 text-[10px] font-semibold text-cosmic-orange-light">
               Aşağı ehtiyat
+            </span>
+          )}
+          {status === "out" && (
+            <span className="inline-flex items-center rounded-full border border-red-500/30 bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-300">
+              Bitib
             </span>
           )}
         </div>

@@ -4,7 +4,7 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 
 ## A. Core features
 - [ ] Order search and status filters on the orders list
-- [ ] Low-stock warning badge on the flowers page
+- [x] Low-stock warning badge on the flowers page
 - [ ] Sales export by date range
 
 ## B. Test coverage
