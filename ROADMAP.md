@@ -19,6 +19,6 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 - [x] Extract orders list filter into `src/lib/orderFilters.ts` with tests
 
 ## D. Performance and polish
-- [ ] Lazy-load the image upload component
+- [x] Lazy-load the image upload component
 - [ ] Paginate the orders API
 - [ ] Dark theme pass for admin pages

@@ -2,10 +2,16 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import Input from "@/app/ui/Input";
 import Select from "@/app/ui/Select";
 import Button from "@/app/ui/Button";
-import ImageUpload from "@/components/ImageUpload";
+
+const ImageUpload = dynamic(() => import("@/components/ImageUpload"), {
+  loading: () => (
+    <div className="h-24 rounded-md border border-dashed animate-pulse" aria-hidden="true" />
+  ),
+});
 
 export default function NewOrderForm() {
   const router = useRouter();
