@@ -4,6 +4,7 @@ export type OrderListParams = {
   time?: string;
   florist?: string;
   search?: string;
+  page?: string;
 };
 
 export const ORDER_STATUSES = [
@@ -68,4 +69,27 @@ export function buildOrderWhere(params: OrderListParams): OrderWhere {
   }
 
   return where;
+}
+
+export const ORDERS_PAGE_SIZE = 25;
+
+/**
+ * Parses the 1-based `page` search param. Anything that is not a positive
+ * integer falls back to the first page.
+ */
+export function parsePage(value: string | undefined): number {
+  if (!value || !/^\d+$/.test(value)) return 1;
+  const page = Number(value);
+  return page >= 1 && Number.isSafeInteger(page) ? page : 1;
+}
+
+/** Builds a query string for another page, keeping the active filters. */
+export function pageHref(params: OrderListParams, page: number): string {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (key !== "page" && typeof value === "string" && value) query.set(key, value);
+  }
+  if (page > 1) query.set("page", String(page));
+  const qs = query.toString();
+  return qs ? `?${qs}` : "?";
 }

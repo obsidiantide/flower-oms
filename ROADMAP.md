@@ -20,5 +20,5 @@ Backlog grouped by domain. Mark items `- [x]` when done.
 
 ## D. Performance and polish
 - [x] Lazy-load the image upload component
-- [ ] Paginate the orders API
+- [x] Paginate the orders list
 - [ ] Dark theme pass for admin pages

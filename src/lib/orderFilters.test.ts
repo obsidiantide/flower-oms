@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildOrderWhere } from "./orderFilters";
+import { buildOrderWhere, pageHref, parsePage } from "./orderFilters";
 
 describe("buildOrderWhere", () => {
   it("returns an empty filter for no params", () => {
@@ -43,5 +43,35 @@ describe("buildOrderWhere", () => {
       deliveryTime: "14:00",
       status: "NEW",
     });
+  });
+});
+
+describe("parsePage", () => {
+  it("defaults to the first page", () => {
+    expect(parsePage(undefined)).toBe(1);
+    expect(parsePage("")).toBe(1);
+  });
+
+  it("accepts positive integers", () => {
+    expect(parsePage("3")).toBe(3);
+  });
+
+  it("rejects zero, negatives, fractions and junk", () => {
+    expect(parsePage("0")).toBe(1);
+    expect(parsePage("-2")).toBe(1);
+    expect(parsePage("1.5")).toBe(1);
+    expect(parsePage("abc")).toBe(1);
+    expect(parsePage("99999999999999999999")).toBe(1);
+  });
+});
+
+describe("pageHref", () => {
+  it("keeps filters and sets the page", () => {
+    expect(pageHref({ status: "NEW", search: "" }, 2)).toBe("?status=NEW&page=2");
+  });
+
+  it("drops the page param for the first page", () => {
+    expect(pageHref({ status: "NEW", page: "4" }, 1)).toBe("?status=NEW");
+    expect(pageHref({}, 1)).toBe("?");
   });
 });

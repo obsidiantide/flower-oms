@@ -9,7 +9,7 @@ import Select from "@/app/ui/Select";
 import Button from "@/app/ui/Button";
 import SearchBar from "./ui/SearchBar";
 import OrderCard from "./ui/OrderCard";
-import { buildOrderWhere } from "@/lib/orderFilters";
+import { buildOrderWhere, ORDERS_PAGE_SIZE, pageHref, parsePage } from "@/lib/orderFilters";
 
 function formatStatus(status: string): string {
   switch (status) {
@@ -65,7 +65,7 @@ function statusVariant(status: string): BadgeVariant {
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; date?: string; time?: string; florist?: string; search?: string }>;
+  searchParams: Promise<{ status?: string; date?: string; time?: string; florist?: string; search?: string; page?: string }>;
 }) {
   const params = await searchParams;
   const session = await getServerSession(authOptions);
@@ -80,15 +80,18 @@ export default async function OrdersPage({
   }
 
   const where = buildOrderWhere(params);
+  const total = await prisma.order.count({ where });
+  const pageCount = Math.max(1, Math.ceil(total / ORDERS_PAGE_SIZE));
+  const page = Math.min(parsePage(params.page), pageCount);
 
   const orders = await prisma.order.findMany({
     where,
     include: {
       assignedTo: true,
     },
-    orderBy: {
-      deliveryDate: "asc",
-    },
+    orderBy: [{ deliveryDate: "asc" }, { id: "asc" }],
+    skip: (page - 1) * ORDERS_PAGE_SIZE,
+    take: ORDERS_PAGE_SIZE,
   });
 
   const florists = await prisma.user.findMany({
@@ -235,6 +238,28 @@ export default async function OrdersPage({
             </tbody>
           </table>
         </div>
+
+        {pageCount > 1 && (
+          <nav className="mt-4 flex items-center justify-between gap-3 text-sm text-space-text-secondary">
+            {page > 1 ? (
+              <Link href={pageHref(params, page - 1)} className="rounded-md border border-space-border px-3 py-2 hover:bg-space-surface-light/50">
+                ← Əvvəlki
+              </Link>
+            ) : (
+              <span />
+            )}
+            <span>
+              Səhifə {page} / {pageCount} · {total} sifariş
+            </span>
+            {page < pageCount ? (
+              <Link href={pageHref(params, page + 1)} className="rounded-md border border-space-border px-3 py-2 hover:bg-space-surface-light/50">
+                Növbəti →
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
       </div>
     </div>
   );
